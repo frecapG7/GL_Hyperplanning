@@ -53,7 +53,7 @@ public class Accueil extends Application {
 		MysqlConnection con;
 		
 		try {
-			con = new MysqlConnection("root","");
+			con = new MysqlConnection();
 			ResultSet rs = con.queryTable("SELECT count(*) as nb FROM identification WHERE login = '" + name + "' AND password = '" + password + "'");
 			rs.next();
 			int s = rs.getInt("nb");

@@ -16,37 +16,30 @@ import com.vaadin.ui.Window;
 
 public class Planning extends Application {
 	private Button quit = new Button("Quitter", this, "quit");
+	private String nom="Simon";
 	public VerticalLayout vl = new VerticalLayout();
 	
 	@Override
 	public void init() {
-		buildMainLayout();
+		
+		try {
+			buildMainLayout();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
-	private void buildMainLayout() {
+	private void buildMainLayout() throws Exception {
 		setMainWindow(new Window("Planning"));
 		//vl.setSizeFull();
 		vl.setSpacing(true);
 		vl.setMargin(true);
 		vl.addComponent(createToolbar());
 		
-		
-		/**Calendar cal = new Calendar();
-		cal.setStartDate(new Date());
-		cal.setEndDate(new Date());
-		BasicEvent event = new BasicEvent();
-		java.util.Calendar calendar =
-		java.util.Calendar.getInstance();
-		calendar.setTime(new Date());
-		event.setStart(calendar.getTime());
-		calendar.add(java.util.Calendar.HOUR, 3);
-		event.setEnd(calendar.getTime());
-		event.setCaption("FooBar");
+		ClassCalendar calendarclass=new ClassCalendar();
+		Calendar cal = calendarclass.getCalendarClass(nom);				
 		vl.addComponent(cal);
-
-		BasicEventProvider eventProvider = (BasicEventProvider)
-		cal.getEventProvider();
-		eventProvider.addEvent(event);*/
 		
 		vl.addComponent(new CalendarForm());
 		getMainWindow().setContent(vl);
