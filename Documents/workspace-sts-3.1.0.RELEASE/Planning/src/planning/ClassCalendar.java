@@ -32,7 +32,9 @@ public class ClassCalendar {
 		while (rs.next()) {	
 			Date date_debut=sdf.parse(rs.getString("Date_debut"));
 			Date date_fin=sdf.parse(rs.getString("Date_Fin"));
-			eventProvider.addEvent(new BasicEvent(rs.getString("Nom"),"",date_debut,date_fin));
+			BasicEvent event=new BasicEvent(rs.getString("Nom"),"",date_debut,date_fin);
+			event.setStyleName("mycolor");
+			eventProvider.addEvent(event);
 			/*System.out.println(rs.getString("Date_debut"));*/
 		}
 		
