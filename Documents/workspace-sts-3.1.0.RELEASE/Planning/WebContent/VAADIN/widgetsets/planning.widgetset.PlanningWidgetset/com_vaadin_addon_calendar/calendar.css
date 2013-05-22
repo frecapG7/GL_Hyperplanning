@@ -372,7 +372,7 @@ div.v-calendar-event-all-day {
 }
 
 .v-calendar-week-wrapper-Vsized {
-	height: 400px;
+	height: 460px;
 	overflow-x: hidden !important;
 }
 
@@ -390,4 +390,7 @@ div.v-calendar-event-all-day {
 
 .v-calendar-day-times-Hsized, .v-calendar-day-times-Hsized .v-slot,.v-calendar-day-times-Hsized .v-slot-even {
 	width: 200px;
+}
+.v-calendar .v-calendar-event-mycolor {
+	color:blue;
 }

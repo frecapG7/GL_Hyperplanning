@@ -7,6 +7,7 @@ import java.util.Date;
 import com.vaadin.addon.calendar.event.BasicEvent;
 import com.vaadin.addon.calendar.event.BasicEventProvider;
 import com.vaadin.addon.calendar.ui.Calendar;
+
 import com.vaadin.ui.Button;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.Label;
@@ -19,20 +20,20 @@ public class ClassCalendar extends CustomComponent {
 
 	public ClassCalendar() throws Exception {
 		int id = Login.identifiant;
-		
+
 		setCompositionRoot(vl);
 		vl.setSizeFull();
 		vl.setSpacing(true);
 		vl.setMargin(true);
 		vl.addComponent(quit);
-		
+
 		Calendar cal = new Calendar();
 		cal.setFirstVisibleDayOfWeek(1);
 		cal.setLastVisibleDayOfWeek(6);
 		cal.setFirstVisibleHourOfDay(8);
 		cal.setLastVisibleHourOfDay(20);
 		cal.setHeight("600px");
-		
+
 		BasicEventProvider eventProvider = (BasicEventProvider) cal
 				.getEventProvider();
 		con = new MysqlConnection();
@@ -51,12 +52,12 @@ public class ClassCalendar extends CustomComponent {
 			Date date_fin = sdf.parse(rs.getString("Date_Fin"));
 			eventProvider.addEvent(new BasicEvent(rs.getString("Nom"), "",
 					date_debut, date_fin));
-			 //System.out.println(rs.getString("Date_debut"));
+			// System.out.println(rs.getString("Date_debut"));
 		}
 
 		vl.addComponent(cal);
 	}
-	
+
 	public void quit() {
 		getApplication().close();
 	}
