@@ -50,7 +50,7 @@ public class Accueil extends Application {
 	public void validate() {
 		String name = (String) login.getValue();
 		String password = (String) pwd.getValue();
-		MysqlConnection con;
+		/*MysqlConnection con;
 		
 		try {
 			con = new MysqlConnection("root","");
@@ -64,7 +64,7 @@ public class Accueil extends Application {
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		}*/
 	}
 
 
