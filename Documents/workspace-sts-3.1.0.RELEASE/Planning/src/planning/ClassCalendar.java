@@ -22,7 +22,7 @@ public class ClassCalendar extends CustomComponent {
 		int id = Login.identifiant;
 
 		setCompositionRoot(vl);
-		vl.setSizeFull();
+		//vl.setSizeFull();
 		vl.setSpacing(true);
 		vl.setMargin(true);
 		vl.addComponent(quit);

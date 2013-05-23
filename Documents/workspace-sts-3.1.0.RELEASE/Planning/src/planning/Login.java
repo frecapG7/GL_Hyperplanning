@@ -29,6 +29,7 @@ public class Login extends Application {
 	public static int identifiant = 0;
 	public TextField login;
 	public PasswordField pwd;
+	public Label wrongMessage= new Label("");
 
 	public void init() {
 		mainWindow = new Window("Acceuil");
@@ -42,7 +43,7 @@ public class Login extends Application {
 		Button validButton = new Button("Valider", this, "validate");
 		vl.addComponent(formLogin());
 		vl.addComponent(validButton);
-
+		vl.addComponent(wrongMessage);
 	}
 
 	public HorizontalLayout formLogin() {
@@ -58,6 +59,7 @@ public class Login extends Application {
 		hl.addComponent(pwd);
 		return hl;
 	}
+	
 
 	public void validate() {
 		String name = (String) login.getValue();
@@ -90,7 +92,9 @@ public class Login extends Application {
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
+			wrongMessage.setCaption("Identifiant ou Mot de passe pas correct");			
+			getMainWindow().setContent(vl);
 		}
 	}
 
