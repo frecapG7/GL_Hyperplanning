@@ -10,6 +10,7 @@ import com.vaadin.ui.VerticalLayout;
 
 public class AddPlanning extends CustomComponent {
 	private VerticalLayout vl = new VerticalLayout();
+	private VerticalLayout vlCalendar = new VerticalLayout();
 	private Select select = new Select ("Select something here");
 	private Select select2 = new Select ("Select something here");
 	private MysqlConnection con;
@@ -41,7 +42,10 @@ public class AddPlanning extends CustomComponent {
 					select2.addListener(new Property.ValueChangeListener(){
 						public void valueChange(ValueChangeEvent event){
 							try {
-								vl.addComponent(new AddPlanningCalendar(event.getProperty().toString(),"eleve"));
+								vl.removeComponent(vlCalendar);
+								vlCalendar.removeAllComponents();
+								vlCalendar.addComponent(new AddPlanningCalendar(event.getProperty().toString(),"eleve"));
+								vl.addComponent(vlCalendar);
 							} catch (Exception e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
@@ -66,7 +70,10 @@ public class AddPlanning extends CustomComponent {
 						select2.addListener(new Property.ValueChangeListener(){
 							public void valueChange(ValueChangeEvent event){
 								try {
-									vl.addComponent(new AddPlanningCalendar(event.getProperty().toString(),"parcour"));
+									vl.removeComponent(vlCalendar);
+									vlCalendar.removeAllComponents();
+									vlCalendar.addComponent(new AddPlanningCalendar(event.getProperty().toString(),"parcour"));
+									vl.addComponent(vlCalendar);
 								} catch (Exception e) {
 									// TODO Auto-generated catch block
 									e.printStackTrace();
@@ -92,7 +99,10 @@ public class AddPlanning extends CustomComponent {
 							select2.addListener(new Property.ValueChangeListener(){
 								public void valueChange(ValueChangeEvent event){
 									try {
-										vl.addComponent(new AddPlanningCalendar(event.getProperty().toString(),"groupe"));
+										vl.removeComponent(vlCalendar);
+										vlCalendar.removeAllComponents();
+										vlCalendar.addComponent(new AddPlanningCalendar(event.getProperty().toString(),"groupe"));
+										vl.addComponent(vlCalendar);
 									} catch (Exception e) {
 										// TODO Auto-generated catch block
 										e.printStackTrace();
@@ -110,5 +120,6 @@ public class AddPlanning extends CustomComponent {
 			});		
 		vl.addComponent(select);
 		vl.addComponent(select2);
+		vl.addComponent(vlCalendar);
 	}
 }
