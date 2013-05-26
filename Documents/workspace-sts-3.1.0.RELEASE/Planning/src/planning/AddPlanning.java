@@ -22,6 +22,7 @@ public class AddPlanning extends CustomComponent {
 		select.addItem("eleve");
 		select.addItem("groupe");
 		select.setImmediate(true);
+		select2.setImmediate(true);
 		select.addListener(new Property.ValueChangeListener() {
 
 			public void valueChange(ValueChangeEvent event) 
@@ -36,12 +37,24 @@ public class AddPlanning extends CustomComponent {
 					while (rs.next()) {
 					select2.addItem(rs.getString("nom"));						
 					}
+					
+					select2.addListener(new Property.ValueChangeListener(){
+						public void valueChange(ValueChangeEvent event){
+							try {
+								vl.addComponent(new AddPlanningCalendar(event.getProperty().toString(),"eleve"));
+							} catch (Exception e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}	
+						}
+					});
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
-				}
-				 
+				}				 
 			     }
+			     
+			     
 			     if (event.getProperty().toString()=="parcours"){
 			    	 select2.removeAllItems();
 			    	 try {
@@ -50,11 +63,23 @@ public class AddPlanning extends CustomComponent {
 						while (rs.next()) {
 								select2.addItem(rs.getString("nom"));						
 						}
+						select2.addListener(new Property.ValueChangeListener(){
+							public void valueChange(ValueChangeEvent event){
+								try {
+									vl.addComponent(new AddPlanningCalendar(event.getProperty().toString(),"parcour"));
+								} catch (Exception e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}	
+							}
+						});
 					} catch (Exception e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				 }
+			     
+			     
 			     if (event.getProperty().toString()=="groupe"){
 			    	 select2.removeAllItems();
 			    	 try {
@@ -63,14 +88,26 @@ public class AddPlanning extends CustomComponent {
 							while (rs.next()) {
 									select2.addItem(rs.getString("Nom"));						
 							}
+							
+							select2.addListener(new Property.ValueChangeListener(){
+								public void valueChange(ValueChangeEvent event){
+									try {
+										vl.addComponent(new AddPlanningCalendar(event.getProperty().toString(),"groupe"));
+									} catch (Exception e) {
+										// TODO Auto-generated catch block
+										e.printStackTrace();
+									}	
+								}
+							});
+							
 						} catch (Exception e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
 				  }
+			     
 			    }
-			});
-		
+			});		
 		vl.addComponent(select);
 		vl.addComponent(select2);
 	}
