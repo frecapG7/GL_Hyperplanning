@@ -19,7 +19,7 @@ public class AddPlanning extends CustomComponent {
 		setCompositionRoot(vl);
 		select.setNullSelectionItemId("Sélectionner");
 		select2.setNullSelectionItemId("Sélectionner");
-		select.addItem("parcours");
+		select.addItem("parcour");
 		select.addItem("eleve");
 		select.addItem("groupe");
 		select.setImmediate(true);
@@ -59,7 +59,7 @@ public class AddPlanning extends CustomComponent {
 			     }
 			     
 			     
-			     if (event.getProperty().toString()=="parcours"){
+			     if (event.getProperty().toString()=="parcour"){
 			    	 select2.removeAllItems();
 			    	 try {
 						con = new MysqlConnection();
