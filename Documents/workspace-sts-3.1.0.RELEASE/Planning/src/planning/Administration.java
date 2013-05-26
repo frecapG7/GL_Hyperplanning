@@ -71,6 +71,7 @@ public class Administration extends CustomComponent implements TabSheet.Selected
 		Panel panel = new Panel();
 		panel.setHeight("550px");
 		panel.setWidth("1150px");
+		panel.setContent(new AddPlanning());
 		return panel;
 	}
 	
