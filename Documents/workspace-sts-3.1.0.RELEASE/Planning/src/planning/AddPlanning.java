@@ -1,5 +1,7 @@
 package planning;
 
+import java.sql.ResultSet;
+
 import com.vaadin.data.Property;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.ui.CustomComponent;
@@ -8,8 +10,9 @@ import com.vaadin.ui.VerticalLayout;
 
 public class AddPlanning extends CustomComponent {
 	private VerticalLayout vl = new VerticalLayout();
-	Select select = new Select ("Select something here");
-	Select select2 = new Select ("Select something here");
+	private Select select = new Select ("Select something here");
+	private Select select2 = new Select ("Select something here");
+	private MysqlConnection con;
 	
 	public AddPlanning() {
 		setCompositionRoot(vl);
@@ -25,18 +28,45 @@ public class AddPlanning extends CustomComponent {
 			    {           
 			     if (event.getProperty().toString()=="eleve"){
 			     select2.removeAllItems();
-			     select2.addItem("dai");
-			     select2.addItem("simon");
+			     try {
+					con = new MysqlConnection();
+					ResultSet rs = con.queryTable("SELECT DISTINCT " +
+					"personne.nom, personne.id_identifiant " +
+					"FROM personne, eleve WHERE personne.id_identifiant = eleve.id_eleve");
+					while (rs.next()) {
+					select2.addItem(rs.getString("nom"));						
+					}
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				 
 			     }
 			     if (event.getProperty().toString()=="parcours"){
 			    	 select2.removeAllItems();
-				     select2.addItem("system d'information");
-				     select2.addItem("ligiciel engineering");
+			    	 try {
+						con = new MysqlConnection();
+						ResultSet rs = con.queryTable("select nom from parcour");
+						while (rs.next()) {
+								select2.addItem(rs.getString("nom"));						
+						}
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				 }
 			     if (event.getProperty().toString()=="groupe"){
 			    	 select2.removeAllItems();
-				     select2.addItem("g5");
-				     select2.addItem("g6");
+			    	 try {
+							con = new MysqlConnection();
+							ResultSet rs = con.queryTable("select nom from groupe");
+							while (rs.next()) {
+									select2.addItem(rs.getString("Nom"));						
+							}
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 				  }
 			    }
 			});
