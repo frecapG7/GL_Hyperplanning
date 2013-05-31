@@ -23,20 +23,24 @@ import com.vaadin.ui.DragAndDropWrapper.DragStartMode;
 import com.vaadin.ui.DragAndDropWrapper.WrapperTransferable;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.Select;
 import com.vaadin.ui.Table.TableTransferable;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
 public class AddPlanningCalendar extends CustomComponent{
 	public HorizontalLayout hl = new HorizontalLayout();
+	public HorizontalLayout hl2 = new HorizontalLayout();
 	public VerticalLayout vl = new VerticalLayout();	
 	public TextField classNameInputField=new TextField("Le nom de cour:");	
 	public TextField classTimeInputField=new TextField("Duree(minute):");
 	public TextField classWeekInputField=new TextField("Semaine:");
+	public Select classrommInputField=new Select("Salle:");
+	public Select classTeacherInputField=new Select("Professeur:");
 	public Button moveMe=new Button("Move me to calendar");
 	public Button confirmAddPlanning=new Button("Valider");
 	public Button reset=new Button("Reset");
-	private MysqlConnection con;
+	private MysqlConnection con= new MysqlConnection();;
 	public AddPlanningCalendar(String nom,String type) throws Exception {
 		setCompositionRoot(hl);
 		Calendar cal = new Calendar();
@@ -57,8 +61,7 @@ public class AddPlanningCalendar extends CustomComponent{
 		
 		if(type=="groupe") {			
 			BasicEventProvider eventProvider = (BasicEventProvider) cal
-					.getEventProvider();
-			con = new MysqlConnection();
+					.getEventProvider();			
 			ResultSet rs = con.queryTable("select cours.Nom,cours.Date_debut,cours.Date_Fin FROM cours,groupe " +
 					"Where cours.ID_groupe_cours=groupe.ID AND groupe.Nom='"
 					+nom+"'");
@@ -70,7 +73,7 @@ public class AddPlanningCalendar extends CustomComponent{
 				eventProvider.addEvent(new BasicEvent(rs.getString("Nom"), "",
 						date_debut, date_fin));				
 			}
-			
+		}
 			cal.setDropHandler(new DropHandler(){
 
 				public void drop(DragAndDropEvent event) {
@@ -89,21 +92,37 @@ public class AddPlanningCalendar extends CustomComponent{
 				public AcceptCriterion getAcceptCriterion() {
 					return AcceptAll.get();
 				}});		
+		ResultSet rs = con.queryTable("select Nom FROM salles ");
+		while(rs.next()){
+			classrommInputField.addItem(rs.getString("Nom"));
 		}
+		rs=con.queryTable("select Nom FROM personne where id_identifiant=2 ");
+		while(rs.next()){
+			classTeacherInputField.addItem(rs.getString("Nom"));
+		}
+		classrommInputField.setNullSelectionItemId("Sélectionner");
+		classTeacherInputField.setNullSelectionItemId("Sélectionner");
 		classNameInputField.setRequired(true);
 		classNameInputField.setRequiredError("The Field may not be empty.");
 		classTimeInputField.setRequired(true);
 		classTimeInputField.setRequiredError("The Field may not be empty.");
 		classWeekInputField.setRequired(true);
 		classWeekInputField.setRequiredError("The Field may not be empty.");
+		classrommInputField.setRequired(true);
+		classrommInputField.setRequiredError("The Field may not be empty.");		
 		moveMe.setVisible(false);		
 		confirmAddPlanning.addListener(new Button.ClickListener() {
 
 			public void buttonClick(ClickEvent event) {
-				if(classNameInputField.getValue()!=""&&classTimeInputField.getValue()!=""&&classWeekInputField.getValue()!="" ){
+				if(classNameInputField.getValue()!=""&&classTimeInputField.getValue()!=""&&classWeekInputField.getValue()!=""&&classrommInputField.getValue()!=null){
 					//moveMe.setWidth("20px");
 					//moveMe.setHeight("30px");
-					
+					//System.out.println(classrommInputField.getValue());
+					classNameInputField.setReadOnly(true);
+					classTimeInputField.setReadOnly(true);
+					classWeekInputField.setReadOnly(true);
+					classrommInputField.setReadOnly(true);
+					classTeacherInputField.setReadOnly(true);
 				moveMe.setVisible(true);	}
 				else
 				{
@@ -116,19 +135,28 @@ public class AddPlanningCalendar extends CustomComponent{
 		reset.addListener(new Button.ClickListener() {
 
 			public void buttonClick(ClickEvent event) {
-				moveMe.setVisible(false);	
+				moveMe.setVisible(false);
+				classNameInputField.setReadOnly(false);
+				classTimeInputField.setReadOnly(false);
+				classWeekInputField.setReadOnly(false);
+				classrommInputField.setReadOnly(false);
+				classTeacherInputField.setReadOnly(false);
 				classNameInputField.setValue("");
 				classTimeInputField.setValue("");
-				classWeekInputField.setValue("");
+				classWeekInputField.setValue("");				
 			}
 			
 		});
+				
 		hl.addComponent(cal);				
 		vl.addComponent(classNameInputField);
 		vl.addComponent(classTimeInputField);
 		vl.addComponent(classWeekInputField);
-		vl.addComponent(confirmAddPlanning);
-		vl.addComponent(reset);
+		vl.addComponent(classrommInputField);
+		vl.addComponent(classTeacherInputField);
+		hl2.addComponent(confirmAddPlanning);
+		hl2.addComponent(reset);
+		vl.addComponent(hl2);
 		vl.addComponent(moveMe);
 		final DragAndDropWrapper classWrap = new DragAndDropWrapper(moveMe);
 		classWrap.setDragStartMode(DragStartMode.COMPONENT);
@@ -152,14 +180,23 @@ public class AddPlanningCalendar extends CustomComponent{
 		java.sql.Timestamp sqlDate_begin = new java.sql.Timestamp(startTime.getTime());
 		//System.out.println(sqlDate_begin);
 		java.sql.Timestamp sqlDate_end = new java.sql.Timestamp(endTime.getTime());
-		//System.out.println(sqlDate_end);
-		MysqlConnection con = new MysqlConnection();
+		//System.out.println(classrommInputField.getValue());		
+		ResultSet rs=con.queryTable("select id from salles where nom='"+classrommInputField.getValue()+"'");
+		int id_salle=1;
+		while(rs.next()){
+		id_salle=Integer.parseInt(rs.getString("id"));}				
+		rs=con.queryTable("select professeur.id_prof from professeur,personne where personne.nom='"
+		+classTeacherInputField.getValue()
+		+"' and personne.id_eleve_prof=professeur.id_prof");
+		int id_prof=1;
+		while(rs.next()){
+		id_prof=Integer.parseInt(rs.getString("id_prof"));}
 		con.executeTable("INSERT INTO cours (Nom,Date_Debut,Date_Fin,Id_salle,id_matiere,id_professeur,id_groupe_cours) VALUES ('"
 						+ (String)classNameInputField.getValue()
 						+ "','"
 						+ sqlDate_begin
 						+ "','"
-						+ sqlDate_end + "',1,1,1,1)");
+						+ sqlDate_end + "',"+id_salle+",1,"+id_prof+",1)");
 		BasicEventProvider ep = (BasicEventProvider) details
 				.getTargetCalendar().getEventProvider();		
 		ep.addEvent(new BasicEvent((String)classNameInputField.getValue(), "",
