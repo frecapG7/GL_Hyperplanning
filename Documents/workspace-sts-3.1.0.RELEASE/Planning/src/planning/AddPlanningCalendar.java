@@ -41,7 +41,9 @@ public class AddPlanningCalendar extends CustomComponent{
 	public Button confirmAddPlanning=new Button("Valider");
 	public Button reset=new Button("Reset");
 	private MysqlConnection con= new MysqlConnection();;
+	public String nom;
 	public AddPlanningCalendar(String nom,String type) throws Exception {
+		this.nom=nom;
 		setCompositionRoot(hl);
 		Calendar cal = new Calendar();
 		cal.setFirstVisibleDayOfWeek(2);
@@ -51,6 +53,8 @@ public class AddPlanningCalendar extends CustomComponent{
 		//cal.setTimeZone(TimeZone.getTimeZone("Europe/Paris"));
 		cal.setHeight("450px");
 		cal.setWidth("850px");
+		BasicEventProvider eventProvider = (BasicEventProvider) cal
+				.getEventProvider();
 		if(type=="eleve") {
 			
 		}
@@ -59,9 +63,7 @@ public class AddPlanningCalendar extends CustomComponent{
 			
 		}
 		
-		if(type=="groupe") {			
-			BasicEventProvider eventProvider = (BasicEventProvider) cal
-					.getEventProvider();			
+		if(type=="groupe") {									
 			ResultSet rs = con.queryTable("select cours.Nom,cours.Date_debut,cours.Date_Fin FROM cours,groupe " +
 					"Where cours.ID_groupe_cours=groupe.ID AND groupe.Nom='"
 					+nom+"'");
@@ -73,25 +75,23 @@ public class AddPlanningCalendar extends CustomComponent{
 				eventProvider.addEvent(new BasicEvent(rs.getString("Nom"), "",
 						date_debut, date_fin));				
 			}
-		}
+		
 			cal.setDropHandler(new DropHandler(){
-
 				public void drop(DragAndDropEvent event) {
 					CalendarTargetDetails details =
 							(CalendarTargetDetails) event.getTargetDetails();
 					WrapperTransferable transferable =
 							(WrapperTransferable) event.getTransferable();
 				try {
-					createEvent(details, transferable);
+					createEventByGroup(details, transferable);
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				}
-
+					e.printStackTrace();}}
 				public AcceptCriterion getAcceptCriterion() {
 					return AcceptAll.get();
-				}});		
+				}});
+		}
+		
 		ResultSet rs = con.queryTable("select Nom FROM salles ");
 		while(rs.next()){
 			classrommInputField.addItem(rs.getString("Nom"));
@@ -99,7 +99,7 @@ public class AddPlanningCalendar extends CustomComponent{
 		rs=con.queryTable("select Nom FROM personne where id_identifiant=2 ");
 		while(rs.next()){
 			classTeacherInputField.addItem(rs.getString("Nom"));
-		}
+		}	
 		classrommInputField.setNullSelectionItemId("Sélectionner");
 		classTeacherInputField.setNullSelectionItemId("Sélectionner");
 		classNameInputField.setRequired(true);
@@ -110,9 +110,9 @@ public class AddPlanningCalendar extends CustomComponent{
 		classWeekInputField.setRequiredError("The Field may not be empty.");
 		classrommInputField.setRequired(true);
 		classrommInputField.setRequiredError("The Field may not be empty.");		
-		moveMe.setVisible(false);		
+		moveMe.setVisible(false);	
+		
 		confirmAddPlanning.addListener(new Button.ClickListener() {
-
 			public void buttonClick(ClickEvent event) {
 				if(classNameInputField.getValue()!=""&&classTimeInputField.getValue()!=""&&classWeekInputField.getValue()!=""&&classrommInputField.getValue()!=null){
 					//moveMe.setWidth("20px");
@@ -129,11 +129,10 @@ public class AddPlanningCalendar extends CustomComponent{
 					getApplication().getMainWindow().showNotification(
 							"Les champs doivent pas null.");
 				}
-			}
-			
+			}			
 		});
+		
 		reset.addListener(new Button.ClickListener() {
-
 			public void buttonClick(ClickEvent event) {
 				moveMe.setVisible(false);
 				classNameInputField.setReadOnly(false);
@@ -145,8 +144,7 @@ public class AddPlanningCalendar extends CustomComponent{
 				classTimeInputField.setValue("");
 				classWeekInputField.setValue("");				
 			}
-			
-		});
+			});
 				
 		hl.addComponent(cal);				
 		vl.addComponent(classNameInputField);
@@ -165,7 +163,7 @@ public class AddPlanningCalendar extends CustomComponent{
 		hl.addComponent(vl);
 		
 	}
-	protected void createEvent(CalendarTargetDetails details,
+	protected void createEventByGroup(CalendarTargetDetails details,
 			WrapperTransferable transferable) throws Exception {
 		Date dropTime = details.getDropTime();
 		java.util.Calendar timeCalendar = details.getTargetCalendar()
@@ -182,21 +180,31 @@ public class AddPlanningCalendar extends CustomComponent{
 		java.sql.Timestamp sqlDate_end = new java.sql.Timestamp(endTime.getTime());
 		//System.out.println(classrommInputField.getValue());		
 		ResultSet rs=con.queryTable("select id from salles where nom='"+classrommInputField.getValue()+"'");
-		int id_salle=1;
+		int id_salle=0;
 		while(rs.next()){
 		id_salle=Integer.parseInt(rs.getString("id"));}				
 		rs=con.queryTable("select professeur.id_prof from professeur,personne where personne.nom='"
 		+classTeacherInputField.getValue()
 		+"' and personne.id_eleve_prof=professeur.id_prof");
-		int id_prof=1;
+		int id_prof=0;
 		while(rs.next()){
 		id_prof=Integer.parseInt(rs.getString("id_prof"));}
+		rs=con.queryTable("select id FROM groupe where nom='"+nom+"'");
+		int id_group=0;
+		while(rs.next()){
+			id_group=Integer.parseInt(rs.getString("id"));
+		}
+		rs=con.queryTable("select id_matiere FROM matiere_groupe where id_groupe="+id_group+"");
+		int id_matiere=0;
+		while(rs.next()){
+			id_group=Integer.parseInt(rs.getString("id_matiere"));
+		}
 		con.executeTable("INSERT INTO cours (Nom,Date_Debut,Date_Fin,Id_salle,id_matiere,id_professeur,id_groupe_cours) VALUES ('"
 						+ (String)classNameInputField.getValue()
 						+ "','"
 						+ sqlDate_begin
 						+ "','"
-						+ sqlDate_end + "',"+id_salle+",1,"+id_prof+",1)");
+						+ sqlDate_end + "',"+id_salle+","+id_group+","+id_prof+","+id_group+")");
 		BasicEventProvider ep = (BasicEventProvider) details
 				.getTargetCalendar().getEventProvider();		
 		ep.addEvent(new BasicEvent((String)classNameInputField.getValue(), "",
