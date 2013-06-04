@@ -183,12 +183,12 @@ public class AddPlanningCalendar extends CustomComponent{
 		int id_salle=0;
 		while(rs.next()){
 		id_salle=Integer.parseInt(rs.getString("id"));}				
-		rs=con.queryTable("select professeur.id_prof from professeur,personne where personne.nom='"
+		rs=con.queryTable("select id_identifiant from personne where personne.nom='"
 		+classTeacherInputField.getValue()
-		+"' and personne.id_eleve_prof=professeur.id_prof");
+		+"' and (personne.statut=2 or personne.statut=3)");
 		int id_prof=0;
 		while(rs.next()){
-		id_prof=Integer.parseInt(rs.getString("id_prof"));}
+		id_prof=Integer.parseInt(rs.getString("id_identifiant"));}
 		rs=con.queryTable("select id FROM groupe where nom='"+nom+"'");
 		int id_group=0;
 		while(rs.next()){
