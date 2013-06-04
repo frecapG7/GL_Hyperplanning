@@ -16,7 +16,7 @@
 			<description>
 			Vaadin application class to start</description>
 			<param-name>application</param-name>
-			<param-value>planning.Login</param-value>
+			<param-value>Login</param-value>
 		</init-param>
 		<init-param>
 			<description>
