@@ -42,8 +42,10 @@ public class AddPlanningCalendar extends CustomComponent{
 	public Button reset=new Button("Reset");
 	private MysqlConnection con= new MysqlConnection();;
 	public String nom;
+	public String type;
 	public AddPlanningCalendar(String nom,String type) throws Exception {
 		this.nom=nom;
+		this.type=type;
 		setCompositionRoot(hl);
 		Calendar cal = new Calendar();
 		cal.setFirstVisibleDayOfWeek(2);
@@ -55,10 +57,7 @@ public class AddPlanningCalendar extends CustomComponent{
 		cal.setWidth("850px");
 		BasicEventProvider eventProvider = (BasicEventProvider) cal
 				.getEventProvider();
-		if(type=="eleve") {
 			
-		}
-		
 		if(type=="parcour") {
 			
 		}
