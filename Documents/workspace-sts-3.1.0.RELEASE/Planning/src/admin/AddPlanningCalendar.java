@@ -1,11 +1,11 @@
 package admin;
 
-import global.MysqlConnection;
-
 import java.sql.ResultSet;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
+
+import global.MysqlConnection;
 
 import com.vaadin.addon.calendar.event.BasicEvent;
 import com.vaadin.addon.calendar.event.BasicEventProvider;
@@ -44,8 +44,10 @@ public class AddPlanningCalendar extends CustomComponent{
 	public Button reset=new Button("Reset");
 	private MysqlConnection con= new MysqlConnection();;
 	public String nom;
+	public String type;
 	public AddPlanningCalendar(String nom,String type) throws Exception {
 		this.nom=nom;
+		this.type=type;
 		setCompositionRoot(hl);
 		Calendar cal = new Calendar();
 		cal.setFirstVisibleDayOfWeek(2);
@@ -57,10 +59,7 @@ public class AddPlanningCalendar extends CustomComponent{
 		cal.setWidth("850px");
 		BasicEventProvider eventProvider = (BasicEventProvider) cal
 				.getEventProvider();
-		if(type=="eleve") {
 			
-		}
-		
 		if(type=="parcour") {
 			
 		}
