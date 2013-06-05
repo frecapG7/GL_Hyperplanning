@@ -105,11 +105,11 @@ public class Login extends Application {
 		}
 	}
 	
-	public void test() {
+	/*public void test() {
 		
 		Label l = new Label("" + statut);
 		vl.addComponent(l);
-	}
+	}*/
 
 	public String encode(String password) {
 		byte[] hash = null;

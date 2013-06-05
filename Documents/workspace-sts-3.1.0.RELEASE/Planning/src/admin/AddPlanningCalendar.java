@@ -10,14 +10,19 @@ import global.MysqlConnection;
 import com.vaadin.addon.calendar.event.BasicEvent;
 import com.vaadin.addon.calendar.event.BasicEventProvider;
 import com.vaadin.addon.calendar.ui.Calendar;
+import com.vaadin.addon.calendar.ui.CalendarComponentEvents;
+import com.vaadin.addon.calendar.ui.CalendarComponentEvents.EventClick;
+import com.vaadin.addon.calendar.ui.CalendarComponentEvents.MoveEvent;
 import com.vaadin.addon.calendar.ui.CalendarTargetDetails;
 import com.vaadin.data.Item;
+import com.vaadin.event.MouseEvents;
 import com.vaadin.event.dd.DragAndDropEvent;
 import com.vaadin.event.dd.DropHandler;
 import com.vaadin.event.dd.acceptcriteria.AcceptAll;
 import com.vaadin.event.dd.acceptcriteria.AcceptCriterion;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
+import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.DateField;
 import com.vaadin.ui.DragAndDropWrapper;
@@ -29,6 +34,7 @@ import com.vaadin.ui.Select;
 import com.vaadin.ui.Table.TableTransferable;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.Window;
 
 public class AddPlanningCalendar extends CustomComponent{
 	public HorizontalLayout hl = new HorizontalLayout();
@@ -45,11 +51,13 @@ public class AddPlanningCalendar extends CustomComponent{
 	private MysqlConnection con= new MysqlConnection();;
 	public String nom;
 	public String type;
+	Window change = new Window("Changer");
+	Calendar cal = new Calendar();
+	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	public AddPlanningCalendar(String nom,String type) throws Exception {
 		this.nom=nom;
 		this.type=type;
-		setCompositionRoot(hl);
-		Calendar cal = new Calendar();
+		setCompositionRoot(hl);		
 		cal.setFirstVisibleDayOfWeek(2);
 		cal.setLastVisibleDayOfWeek(6);
 		cal.setFirstVisibleHourOfDay(8);
@@ -68,7 +76,7 @@ public class AddPlanningCalendar extends CustomComponent{
 			ResultSet rs = con.queryTable("select cours.Nom,cours.Date_debut,cours.Date_Fin FROM cours,groupe " +
 					"Where cours.ID_groupe_cours=groupe.ID AND groupe.Nom='"
 					+nom+"'");
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			
 
 			while (rs.next()) {
 				Date date_debut = sdf.parse(rs.getString("Date_debut"));
@@ -91,6 +99,39 @@ public class AddPlanningCalendar extends CustomComponent{
 				public AcceptCriterion getAcceptCriterion() {
 					return AcceptAll.get();
 				}});
+			cal.setHandler(new CalendarComponentEvents.EventClickHandler() {
+				public void eventClick(EventClick event) {
+				BasicEvent e = (BasicEvent) event.getCalendarEvent();
+				try {
+					changeWindow(e);
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}				
+				}
+				});
+			cal.setHandler(new CalendarComponentEvents.EventMoveHandler() {				
+				
+				public void eventMove(MoveEvent event) {
+				BasicEvent e = (BasicEvent) event.getCalendarEvent();				
+				String date_begin=sdf.format(e.getStart());
+				String date_end=sdf.format(e.getEnd());
+				long currentDateRange = e.getEnd().getTime()
+						- e.getStart().getTime();
+				String date_begin_new=sdf.format(event.getNewStart());
+				String date_end_new=sdf.format(new Date(event.getNewStart().getTime()+currentDateRange));
+				String className=e.getCaption();
+				//System.out.println(className);	
+				try {
+					con.executeTable("update cours set date_debut='"+date_begin_new+"', date_fin='"+
+				date_end_new+"' where date_debut='"+date_begin+"' and nom='"+className+"'");
+					
+				} catch (Exception e1) {					
+					e1.printStackTrace();
+				}
+				
+				}
+			});
 		}
 		
 		ResultSet rs = con.queryTable("select Nom FROM salles ");
@@ -163,6 +204,70 @@ public class AddPlanningCalendar extends CustomComponent{
 		vl.addComponent(classWrap);
 		hl.addComponent(vl);
 		
+	}
+	public void changeWindow(BasicEvent e) throws Exception {
+		change.setPositionX(300);
+		change.setPositionY(200);
+		final BasicEvent eFinal=e;
+		HorizontalLayout hl = new HorizontalLayout();
+		VerticalLayout vl = new VerticalLayout();	
+		Button delete=new Button("Supprimer");
+		Button confirm=new Button("Valider");
+		final DateField beginDateField=new DateField();
+		final DateField endDateField=new DateField();
+		beginDateField.setDateFormat("dd/MM/yyyy  HH:mm");
+		endDateField.setDateFormat("dd/MM/yyyy  HH:mm");
+		final TextField classNameField=new TextField("Nom de class");
+		Date beginDate=e.getStart();
+		final String beginDateFinal=sdf.format(beginDate);
+		Date endDate=e.getEnd();
+		String className=e.getCaption();
+		classNameField.setValue(className);
+		final String classNameFinal=e.getCaption();
+		beginDateField.setValue(beginDate);
+		endDateField.setValue(endDate);
+		vl.addComponent(beginDateField);
+		vl.addComponent(endDateField);
+		vl.addComponent(classNameField);
+		hl.addComponent(confirm);
+		hl.addComponent(delete);
+		vl.addComponent(hl);
+		ResultSet rs=con.queryTable("select id FROM groupe where nom='"+nom+"'");
+		int id_group=0;
+		while(rs.next()){
+			id_group=Integer.parseInt(rs.getString("id"));
+		}
+		final int id_groupFinal=id_group;
+		delete.addListener(new ClickListener(){
+			public void buttonClick(ClickEvent event) {
+				try {
+					con.executeTable("delete from cours where nom='"+classNameFinal+
+							"' and date_debut='"+beginDateFinal+"' and id_groupe_cours="+id_groupFinal);
+				} catch (Exception e) {					
+					e.printStackTrace();
+				}
+				getApplication().getMainWindow().removeWindow(change);	
+				cal.removeEvent(eFinal);				
+			}		});
+		confirm.addListener(new ClickListener(){
+			public void buttonClick(ClickEvent event) {
+				try {
+					con.executeTable("update cours set nom='"+classNameField.getValue()+
+							"', date_debut='"+sdf.format(beginDateField.getValue())+
+							"', date_fin='"+sdf.format(endDateField.getValue())+"' where nom='"+classNameFinal+
+							"' and date_debut='"+beginDateFinal+"' and id_groupe_cours="+id_groupFinal);
+				} catch (Exception e) {					
+					e.printStackTrace();
+				}
+				getApplication().getMainWindow().removeWindow(change);
+				cal.removeEvent(eFinal);
+				cal.addEvent(new BasicEvent((String)classNameField.getValue(),"",(Date)beginDateField.getValue(),(Date)endDateField.getValue()));				
+			}			
+		});		
+		change.setContent(vl);	
+		change.setHeight(200);
+		change.setWidth(180);
+		getApplication().getMainWindow().addWindow(change);		
 	}
 	protected void createEventByGroup(CalendarTargetDetails details,
 			WrapperTransferable transferable) throws Exception {
