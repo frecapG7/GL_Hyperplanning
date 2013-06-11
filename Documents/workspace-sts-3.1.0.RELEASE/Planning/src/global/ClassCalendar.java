@@ -91,7 +91,7 @@ public class ClassCalendar extends CustomComponent {
 		con = new MysqlConnection();
 		ResultSet rs = con
 				.queryTable("SELECT c.Date_Debut, c.Date_Fin, c.id FROM eleve e"
-						+ " INNER JOIN parcours p ON p.id =  e.id_parcours"
+						+ " INNER JOIN parcour p ON p.id =  e.id_parcours"
 						+ " INNER JOIN calendar c ON c.ID = p.id_calendrier"
 						+ " WHERE e.id_eleve = " + id);
 		
@@ -117,7 +117,7 @@ public class ClassCalendar extends CustomComponent {
 						+ " INNER JOIN cours co ON co.ID_professeur = p.id_prof"
 						+ " INNER JOIN groupe_eleve g ON g.ID_groupe = co.ID_groupe_cours"
 						+ " INNER JOIN eleve e ON e.id_eleve = g.ID_eleve"
-						+ " INNER JOIN parcours pa ON pa.id =  e.id_parcours"
+						+ " INNER JOIN parcour pa ON pa.id =  e.id_parcours"
 						+ " INNER JOIN calendar c ON c.ID = pa.id_calendrier"
 						+ " WHERE e.id_eleve = " + id);
 		return rs;

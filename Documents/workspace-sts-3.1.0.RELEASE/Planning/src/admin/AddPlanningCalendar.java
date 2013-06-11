@@ -52,7 +52,7 @@ public class AddPlanningCalendar extends CustomComponent{
 	public String nom;
 	public String type;
 	Window change = new Window("Changer");
-	Calendar cal = new Calendar();
+	Calendar cal = new Calendar();	
 	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	public AddPlanningCalendar(String nom,String type) throws Exception {
 		this.nom=nom;
@@ -73,15 +73,15 @@ public class AddPlanningCalendar extends CustomComponent{
 		}
 		
 		if(type=="groupe") {									
-			ResultSet rs = con.queryTable("select cours.Nom,cours.Date_debut,cours.Date_Fin FROM cours,groupe " +
-					"Where cours.ID_groupe_cours=groupe.ID AND groupe.Nom='"
+			ResultSet rs = con.queryTable("select cours.Nom,salles.nom sallenom,cours.Date_debut,cours.Date_Fin FROM cours,groupe,salles " +
+					"Where cours.ID_groupe_cours=groupe.ID AND cours.id_salle=salles.id AND groupe.Nom='"
 					+nom+"'");
 			
 
 			while (rs.next()) {
 				Date date_debut = sdf.parse(rs.getString("Date_debut"));
 				Date date_fin = sdf.parse(rs.getString("Date_Fin"));
-				eventProvider.addEvent(new BasicEvent(rs.getString("Nom"), "",
+				eventProvider.addEvent(new BasicEvent(rs.getString("Nom")+"\n"+rs.getString("sallenom"), "",
 						date_debut, date_fin));				
 			}
 		
@@ -206,7 +206,8 @@ public class AddPlanningCalendar extends CustomComponent{
 		
 	}
 	public void changeWindow(BasicEvent e) throws Exception {
-		change.setPositionX(300);
+		getApplication().getMainWindow().removeWindow(change);
+		change.setPositionX(500);
 		change.setPositionY(200);
 		final BasicEvent eFinal=e;
 		HorizontalLayout hl = new HorizontalLayout();
@@ -266,7 +267,7 @@ public class AddPlanningCalendar extends CustomComponent{
 		});		
 		change.setContent(vl);	
 		change.setHeight(200);
-		change.setWidth(180);
+		change.setWidth(180);		
 		getApplication().getMainWindow().addWindow(change);		
 	}
 	protected void createEventByGroup(CalendarTargetDetails details,
