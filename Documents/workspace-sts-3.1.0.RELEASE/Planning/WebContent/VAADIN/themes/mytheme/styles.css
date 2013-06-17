@@ -1,0 +1,23 @@
+
+@import "../reindeer/styles.css";
+
+
+.v-datefield-popup-timefield .v-datefield-calendarpanel-header {
+	display:none;
+}
+
+.v-datefield-popup-timefield .v-datefield-calendarpanel-weekdays {
+	display:none;
+}
+
+.v-datefield-popup-timefield .v-datefield-calendarpanel-body {
+	display:none;
+}
+
+.v-datefield-popup-timefield .v-select {
+	width: 60px;
+}
+
+.v-datefield-popup-timefield .v-label {
+	width: 20px;
+}
