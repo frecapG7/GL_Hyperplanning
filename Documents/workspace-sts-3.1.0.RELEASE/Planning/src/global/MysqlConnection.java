@@ -51,6 +51,18 @@ public class MysqlConnection {
         return id;
 	}
 
+	public int countElement(ResultSet rs) {
+		try {
+			rs.last();
+			int count = rs.getRow();
+			rs.first();
+			return count;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return 0;
+	}
 
 	public void endConnection() throws Exception {
 		conn.close();

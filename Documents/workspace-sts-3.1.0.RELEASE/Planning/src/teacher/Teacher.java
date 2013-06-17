@@ -89,6 +89,12 @@ public class Teacher extends CustomComponent implements TabSheet.SelectedTabChan
 		Panel panel = new Panel();
 		panel.setHeight("550px");
 		panel.setWidth("1150px");
+		try {
+			panel.setContent(new BookRoom());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return panel;
 	}
 	

@@ -25,7 +25,6 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.LoginForm;
 import com.vaadin.ui.PasswordField;
-import com.vaadin.ui.SplitPanel;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
@@ -40,6 +39,7 @@ public class Login extends Application {
 	public void init() {
 		mainWindow = new Window("Acceuil");
 		setMainWindow(mainWindow);
+		setTheme("mytheme");
 
 		// layout of the main window
 		vl.setSpacing(true);
@@ -89,7 +89,6 @@ public class Login extends Application {
 			vl.addComponent(l2);*/
 			if (statut == 1) {
 				//student
-				//test();
 				getMainWindow().setContent(new Student());
 			} else if (statut == 2) {
 				//prof
@@ -104,12 +103,6 @@ public class Login extends Application {
 			getMainWindow().showNotification("Identifiant ou Mot de passe pas correct");
 		}
 	}
-	
-	/*public void test() {
-		
-		Label l = new Label("" + statut);
-		vl.addComponent(l);
-	}*/
 
 	public String encode(String password) {
 		byte[] hash = null;
