@@ -160,6 +160,7 @@ public class BookRoom extends CustomComponent {
 	private void roomAvailable(Date beginDate, Date endDate, Object idBatiment) {
 		java.sql.Timestamp sqlDate_begin = new java.sql.Timestamp(beginDate.getTime());
 		java.sql.Timestamp sqlDate_end = new java.sql.Timestamp(endDate.getTime());
+		room.removeAllItems();
 		try {
 			con = new MysqlConnection();
 			ResultSet rs = con.queryTable("SELECT DISTINCT s.ID, s.Nom" +
@@ -292,14 +293,18 @@ public class BookRoom extends CustomComponent {
 		Date beginDate = (Date) begin.getValue();
 		Date endDate = (Date) end.getValue();
 		Object idGroup = group.getValue();
-		if (beginDate != null && endDate != null && beginDate != endDate && idGroup != null) {
+		if (beginDate != null && endDate != null && beginDate != endDate) {
+			if (idGroup == null) {
+				idGroup = -1;
+			}
 			java.sql.Timestamp sqlDate_begin = new java.sql.Timestamp(beginDate.getTime());
 			java.sql.Timestamp sqlDate_end = new java.sql.Timestamp(endDate.getTime());
 			try {
 				con = new MysqlConnection();
 				ResultSet rs = con.queryTable("SELECT COUNT(*) as Nb" +
 						" FROM cours" +
-						" WHERE ID_groupe_cours = " + idGroup +
+						" WHERE (ID_groupe_cours = " + idGroup +
+						" OR ID_professeur = " + id + ")" +
 						" AND actif = 1" +
 						" AND (Date_Debut >= '" + sqlDate_begin + "'" +
 						" AND Date_Debut <= '" + sqlDate_end +"')" +
@@ -317,8 +322,8 @@ public class BookRoom extends CustomComponent {
 				int i = rs.getInt("Nb");
 				if (i != 0) {
 					Notification notif = new Notification(
-						    "Warning",
-						    "<br/>Erreur, le groupe selectionné n'est pas disponible à ce créneau horaire.",
+						    "Erreur",
+						    "<br/>Le créneau horaire n'est pas disponible.",
 						    Notification.TYPE_WARNING_MESSAGE);
 
 					notif.setDelayMsec(20000);

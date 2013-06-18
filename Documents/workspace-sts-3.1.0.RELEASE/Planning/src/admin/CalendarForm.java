@@ -132,16 +132,6 @@ public class CalendarForm extends CustomComponent {
 		endHoliday.setResolution(DateField.RESOLUTION_DAY);
 		endHoliday.setDateFormat("dd/MM/yyyy");
 		
-		/*beginHoliday.addListener(new Property.ValueChangeListener() {
-			public void valueChange(
-					com.vaadin.data.Property.ValueChangeEvent event) {
-				Label l = new Label("test");
-				mainLayout.addComponent(l);
-				endHoliday.setValue(beginHoliday.getValue());
-			}
-		});
-		
-		mainLayout.addComponent(beginHoliday);*/
 	}
 
 	private void addComponents() {
@@ -257,7 +247,6 @@ public class CalendarForm extends CustomComponent {
 
 			if (id_calendar != 0) {
 				try {
-					getApplication().getMainWindow().showNotification("test");
 					update(sqlDate_begin, sqlDate_end);
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
