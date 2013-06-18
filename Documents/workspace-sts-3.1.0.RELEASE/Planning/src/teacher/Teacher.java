@@ -19,12 +19,14 @@ public class Teacher extends CustomComponent implements TabSheet.SelectedTabChan
 	private MysqlConnection con;
 	public Panel planning;
 	public Panel room;
-	public Panel admin;
+	public static Panel admin;
 	
 
 	public Teacher() {
 		setCompositionRoot(vl);
 		Panel panel = new Panel("Planning");
+		vl.setSpacing(true);
+		vl.setMargin(true);
 		vl.addComponent(panel);
 		panel.addComponent(createToolbar());
 		
@@ -65,10 +67,14 @@ public class Teacher extends CustomComponent implements TabSheet.SelectedTabChan
 	
 	public Panel admin() {
 		Panel panel = new Panel();
-		
 		panel.setHeight("550px");
 		panel.setWidth("1150px");
-		//panel.setContent(new AdminTabsheet());
+		try {
+			panel.setContent(new ChangeProfesseur());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return panel;
 	}
 	

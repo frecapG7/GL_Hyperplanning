@@ -20,7 +20,7 @@ public class ClassCalendar extends CustomComponent {
 	public Button quit = new Button("Quitter", this, "quit");
 	int id = LoginInformation.identifiant;
 	int statut = LoginInformation.statut;
-	Calendar cal = new Calendar();
+	public Calendar cal = new Calendar();
 
 	public ClassCalendar() throws Exception {
 		setCompositionRoot(vl);
@@ -60,7 +60,12 @@ public class ClassCalendar extends CustomComponent {
 		while (rs.next()) {
 			Date date_debut = sdf.parse(rs.getString("Date_debut"));
 			Date date_fin = sdf.parse(rs.getString("Date_Fin"));
-			eventProvider.addEvent(new BasicEvent(rs.getString("Nom"), "",
+			String salle = rs.getString("salle");
+			String type = rs.getString("type");
+			String remarque = rs.getString("remarque");
+			String idMatiere = rs.getString("idMatiere");
+			String nom = rs.getString("Nom");
+			eventProvider.addEvent(new BasicEvent(idMatiere + " " + nom, "Salle : " + salle + "<br />Type de cours : " + type + "<br>Remarque : " + remarque,
 					date_debut, date_fin));
 			// System.out.println(rs.getString("Date_debut"));
 		}
@@ -71,11 +76,13 @@ public class ClassCalendar extends CustomComponent {
 	private ResultSet getScheduleStudent() throws Exception {
 		con = new MysqlConnection();
 		ResultSet rs = con
-				.queryTable("SELECT matiere.Nom,cours.Date_debut,cours.Date_Fin FROM cours,matiere,groupe,groupe_eleve,eleve "
+				.queryTable("SELECT matiere.ID as idMatiere,matiere.Nom AS Nom,cours.Date_debut,cours.Date_Fin, type_cours.type, salles.Nom AS salle, cours.remarque"
+						+ " FROM cours,matiere,groupe,groupe_eleve,eleve,type_cours,salles"
 						+ " Where matiere.ID = cours.ID_matiere"
 						+ " AND cours.ID_groupe_cours=groupe.ID AND "
 						+ " groupe.ID=groupe_eleve.ID_groupe AND "
-						+ " groupe_eleve.ID_eleve=eleve.id_eleve AND eleve.id_eleve ="
+						+ " type_cours.id = cours.type AND salles.ID = cours.ID_salle"
+						+ " AND groupe_eleve.ID_eleve=eleve.id_eleve AND eleve.id_eleve ="
 						+ id);
 		return rs;
 	}
@@ -83,8 +90,10 @@ public class ClassCalendar extends CustomComponent {
 	private ResultSet getScheduleTeacher() throws Exception {
 		con = new MysqlConnection();
 		ResultSet rs = con
-				.queryTable("SELECT m.Nom, c.Date_debut, c.Date_Fin FROM cours c"
+				.queryTable("SELECT m.ID as idMatiere,m.Nom AS Nom, c.Date_debut, c.Date_Fin, tc.type, s.Nom AS salle, c.remarque FROM cours c"
 						+ " INNER JOIN matiere m ON m.ID = c.ID_matiere"
+						+ " INNER JOIN type_cours tc ON tc.id = c.type"
+						+ " INNER JOIN salles s ON s.ID = c.ID_salle"
 						+ " WHERE ID_professeur = " + id);
 		return rs;
 	}

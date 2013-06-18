@@ -41,6 +41,7 @@ public class BookRoom extends CustomComponent {
 	private Select batiment;
 	private Select room;
 	private Button valid = new Button("Valider", this, "valid");
+	private Button quit = new Button("Reset", this, "reset");
 	private TextArea note;
 	private int id = LoginInformation.identifiant;
 
@@ -50,6 +51,7 @@ public class BookRoom extends CustomComponent {
 		setCompositionRoot(vl);
 		vl.setSpacing(true);
 		vl.setMargin(true);
+		vl.addComponent(quit);
 
 		matiere = new Select("Choix de la matière");
 		try {
@@ -302,7 +304,15 @@ public class BookRoom extends CustomComponent {
 						" AND (Date_Debut >= '" + sqlDate_begin + "'" +
 						" AND Date_Debut <= '" + sqlDate_end +"')" +
 						" OR (Date_Fin >= '" + sqlDate_begin + "'" +
-						" AND Date_Fin <= '" + sqlDate_end + "')");
+						" AND Date_Fin <= '" + sqlDate_end + "')" +
+						" OR EXISTS (" +
+						" (SELECT DISTINCT v.date_debut" +
+						" FROM vacances v" +
+						" RIGHT JOIN parcours p ON p.id_calendrier = v.id_calendar" +
+						" RIGHT JOIN eleve e ON id_parcours = p.id" +
+						" RIGHT JOIN  groupe_eleve ge ON ge.ID_eleve = e.id_eleve" +
+						" WHERE ge.ID_groupe = " + idGroup +
+						" AND v.date_debut <= '" + sqlDate_begin + "' AND  v.date_fin >= '" + sqlDate_begin + "'))");
 				rs.next();
 				int i = rs.getInt("Nb");
 				if (i != 0) {
