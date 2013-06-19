@@ -1,9 +1,6 @@
 package teacher;
 
 import global.MysqlConnection;
-import global.ClassCalendar;
-
-
 import com.vaadin.ui.Button;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.HorizontalLayout;
@@ -12,8 +9,7 @@ import com.vaadin.ui.TabSheet;
 import com.vaadin.ui.TabSheet.SelectedTabChangeEvent;
 import com.vaadin.ui.VerticalLayout;
 
-public class Teacher extends CustomComponent implements TabSheet.SelectedTabChangeListener{
-	
+public class Teacher extends CustomComponent implements TabSheet.SelectedTabChangeListener {
 	private Button quit = new Button("Quitter", this, "quit");
 	public VerticalLayout vl = new VerticalLayout();
 	private MysqlConnection con;
@@ -83,7 +79,7 @@ public class Teacher extends CustomComponent implements TabSheet.SelectedTabChan
 		panel.setHeight("550px");
 		panel.setWidth("1150px");
 		try {
-			panel.setContent(new ClassCalendar());
+			panel.setContent(new PlanningTeacher());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

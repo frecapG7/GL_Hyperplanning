@@ -1,32 +1,19 @@
 package teacher;
 
 import java.sql.ResultSet;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
-
 import global.LoginInformation;
 import global.MysqlConnection;
-
-import admin.AdminTabsheet;
-
-import com.vaadin.data.Property;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.event.FieldEvents.FocusEvent;
 import com.vaadin.event.FieldEvents.FocusListener;
 import com.vaadin.ui.Button;
-import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.DateField;
-import com.vaadin.ui.Field;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Panel;
 import com.vaadin.ui.Select;
 import com.vaadin.ui.TextArea;
-import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
-import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Window.Notification;
 
 public class BookRoom extends CustomComponent {
@@ -46,7 +33,6 @@ public class BookRoom extends CustomComponent {
 	private int id = LoginInformation.identifiant;
 
 	
-	@SuppressWarnings("serial")
 	public BookRoom() {
 		setCompositionRoot(vl);
 		vl.setSpacing(true);
@@ -161,6 +147,7 @@ public class BookRoom extends CustomComponent {
 		java.sql.Timestamp sqlDate_begin = new java.sql.Timestamp(beginDate.getTime());
 		java.sql.Timestamp sqlDate_end = new java.sql.Timestamp(endDate.getTime());
 		room.removeAllItems();
+		room.setValue(null);
 		try {
 			con = new MysqlConnection();
 			ResultSet rs = con.queryTable("SELECT DISTINCT s.ID, s.Nom" +
@@ -228,6 +215,8 @@ public class BookRoom extends CustomComponent {
 	}
 	
 	private void getGroup() throws Exception {
+		group.removeAllItems();
+		group.setValue(null);
 		con = new MysqlConnection();
 		Object id_matiere = matiere.getValue();
 		ResultSet rs = con.queryTable("SELECT g.ID, g.Nom" +

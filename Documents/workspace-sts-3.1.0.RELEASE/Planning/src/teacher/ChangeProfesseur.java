@@ -1,23 +1,17 @@
 package teacher;
 import java.sql.ResultSet;
-import java.text.SimpleDateFormat;
-
 import com.vaadin.addon.calendar.event.BasicEvent;
-import com.vaadin.addon.calendar.ui.Calendar;
 import com.vaadin.addon.calendar.ui.CalendarComponentEvents;
 import com.vaadin.addon.calendar.ui.CalendarComponentEvents.EventClick;
 import com.vaadin.ui.Button;
-import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.Select;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 import com.vaadin.ui.Button.ClickEvent;
-
-import global.ClassCalendar;
 import global.LoginInformation;
 import global.MysqlConnection;
 
-public class ChangeProfesseur extends ClassCalendar {
+public class ChangeProfesseur extends PlanningTeacher {
 	VerticalLayout vl = new VerticalLayout();
 	private Select newProfesseur = new Select("Nouveau professeur");
 	private Button valid;

@@ -1,9 +1,7 @@
 package admin;
 
 import java.sql.ResultSet;
-
 import global.MysqlConnection;
-
 import com.vaadin.data.Property;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.ui.CustomComponent;

@@ -1,9 +1,7 @@
 package admin;
 
 import java.sql.ResultSet;
-
 import global.MysqlConnection;
-
 import com.vaadin.ui.Button;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.VerticalLayout;

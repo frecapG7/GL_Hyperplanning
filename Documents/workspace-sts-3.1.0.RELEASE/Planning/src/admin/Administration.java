@@ -1,17 +1,12 @@
 package admin;
 
 import global.MysqlConnection;
-
-import com.vaadin.terminal.ClassResource;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.TabSheet;
 import com.vaadin.ui.TabSheet.SelectedTabChangeEvent;
-import com.vaadin.ui.TabSheet.SelectedTabChangeListener;
 import com.vaadin.ui.VerticalLayout;
 
 public class Administration extends CustomComponent implements TabSheet.SelectedTabChangeListener{

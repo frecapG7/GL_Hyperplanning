@@ -1,29 +1,17 @@
-
-
 import global.LoginInformation;
 import global.MysqlConnection;
-
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.ResultSet;
-import java.util.Date;
-
 import student.Student;
 import teacher.Teacher;
-
-
 import admin.Administration;
-
 import com.vaadin.Application;
-import com.vaadin.addon.calendar.event.BasicEvent;
-import com.vaadin.addon.calendar.event.BasicEventProvider;
-import com.vaadin.addon.calendar.ui.Calendar;
+import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
-import com.vaadin.ui.Component;
-import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
-import com.vaadin.ui.LoginForm;
+import com.vaadin.ui.Panel;
 import com.vaadin.ui.PasswordField;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
@@ -32,23 +20,33 @@ import com.vaadin.ui.Window;
 public class Login extends Application {
 
 	public Window mainWindow;
-	public VerticalLayout vl = new VerticalLayout();
+	public VerticalLayout layout = new VerticalLayout();
 	public TextField login;
 	public PasswordField pwd;
+	public Panel panel = new Panel("Se connecter");
 
 	public void init() {
 		mainWindow = new Window("Acceuil");
 		setMainWindow(mainWindow);
 		setTheme("mytheme");
-
-		// layout of the main window
-		vl.setSpacing(true);
+		
+		mainWindow.setContent(layout);
+		layout.addComponent(panel);
+		layout.setSizeFull();
+		layout.setComponentAlignment(panel, Alignment.MIDDLE_CENTER);
+		panel.setWidth("600px");
+		
+		VerticalLayout vl = new VerticalLayout();
+		panel.addComponent(vl);
 		vl.setMargin(true);
-		mainWindow.setContent(vl);
-
+		vl.setSpacing(true);
+		vl.setSizeFull();
 		Button validButton = new Button("Valider", this, "validate");
-		vl.addComponent(formLogin());
+		HorizontalLayout hl = formLogin();
+		vl.addComponent(hl);
+		vl.setComponentAlignment(hl, Alignment.MIDDLE_CENTER);
 		vl.addComponent(validButton);
+		vl.setComponentAlignment(validButton, Alignment.MIDDLE_CENTER);
 	}
 
 	public HorizontalLayout formLogin() {
@@ -58,6 +56,7 @@ public class Login extends Application {
 		pwd = new PasswordField();
 		HorizontalLayout hl = new HorizontalLayout();
 		hl.setSpacing(true);
+		hl.setMargin(true);
 		hl.addComponent(labelLogin);
 		hl.addComponent(login);
 		hl.addComponent(labelPwd);
@@ -70,8 +69,6 @@ public class Login extends Application {
 		String name = (String) login.getValue();
 		String password = encode((String) pwd.getValue());
 		MysqlConnection con;
-		/*Label l = new Label(password);
-		vl.addComponent(l);*/
 
 		try {
 			con = new MysqlConnection();
@@ -83,10 +80,6 @@ public class Login extends Application {
 			int statut = rs.getInt("statut");
 			int identifiant = rs.getInt("id_identifiant");
 			new LoginInformation(statut,identifiant);
-			/*Label l1 = new Label("" + statut);
-			vl.addComponent(l1);
-			Label l2 = new Label("" + identifiant);
-			vl.addComponent(l2);*/
 			if (statut == 1) {
 				//student
 				getMainWindow().setContent(new Student());
@@ -98,7 +91,6 @@ public class Login extends Application {
 				getMainWindow().setContent(new Administration());
 			}
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			//e.printStackTrace();
 			getMainWindow().showNotification("Identifiant ou Mot de passe pas correct");
 		}

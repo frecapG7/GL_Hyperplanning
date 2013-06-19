@@ -1,15 +1,11 @@
 package admin;
 
 import global.MysqlConnection;
-
 import java.sql.ResultSet;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
 import com.vaadin.ui.Button;
 import com.vaadin.ui.CustomComponent;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.Panel;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Button.ClickEvent;

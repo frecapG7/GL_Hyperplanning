@@ -1,6 +1,5 @@
 package global;
 
-
 import java.sql.*;
 
 public class MysqlConnection {
