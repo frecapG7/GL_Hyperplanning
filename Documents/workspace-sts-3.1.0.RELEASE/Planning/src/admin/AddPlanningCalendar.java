@@ -127,10 +127,21 @@ public class AddPlanningCalendar extends CustomComponent {
 				String date_begin_new=sdf.format(event.getNewStart());
 				String date_end_new=sdf.format(new Date(event.getNewStart().getTime()+currentDateRange));
 				String className=e.getCaption();
+				String classId_matiere="";
+				try {
+					ResultSet rs=con.queryTable("select id from matiere where nom='"+className+"'");
+					while(rs.next()){
+						classId_matiere=rs.getString("id");
+					}
+				} catch (Exception e2) {
+					// TODO Auto-generated catch block
+					e2.printStackTrace();
+				}
+				
 				//System.out.println(className);	
 				try {
 					con.executeTable("update cours set date_debut='"+date_begin_new+"', date_fin='"+
-				date_end_new+"' where date_debut='"+date_begin+"' and id_matiere='"+className+"'");
+				date_end_new+"' where date_debut='"+date_begin+"' and id_matiere='"+classId_matiere+"'");
 					
 				} catch (Exception e1) {					
 					e1.printStackTrace();
