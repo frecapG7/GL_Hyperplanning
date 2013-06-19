@@ -9,6 +9,7 @@ import global.LoginInformation;
 import global.MysqlConnection;
 import com.vaadin.addon.calendar.event.BasicEvent;
 import com.vaadin.addon.calendar.event.BasicEventProvider;
+import com.vaadin.addon.calendar.event.CalendarEventEditor;
 import com.vaadin.addon.calendar.ui.Calendar;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.VerticalLayout;
@@ -60,7 +61,7 @@ public class PlanningStudent extends CustomComponent {
 						+ " INNER JOIN vacances v ON v.id_calendar = p.id_calendrier"
 						+ " WHERE e.id_eleve = " + id);
 
-		BasicEventProvider eventProvider = (BasicEventProvider) cal
+		BasicEventProvider eventHoliday = (BasicEventProvider) cal
 				.getEventProvider();
 		
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -71,7 +72,7 @@ public class PlanningStudent extends CustomComponent {
 			Timestamp ts_end = rs.getTimestamp("date_fin");
 			ts_end.setHours(21);
 			Date date_fin = df.parse("" + ts_end);
-			eventProvider.addEvent(new BasicEvent("Vacances", "", date_debut, date_fin));
+			eventHoliday.addEvent(new BasicEvent("Vacances", "", date_debut, date_fin));
 		}
 
 	}

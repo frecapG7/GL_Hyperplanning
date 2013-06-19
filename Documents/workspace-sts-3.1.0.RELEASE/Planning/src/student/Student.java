@@ -57,9 +57,8 @@ public class Student extends CustomComponent implements TabSheet.SelectedTabChan
 		panel.setHeight("550px");
 		panel.setWidth("1150px");
 		try {
-			//panel.setContent();
+			panel.setContent(new PlanningRoom());
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return panel;
@@ -70,9 +69,8 @@ public class Student extends CustomComponent implements TabSheet.SelectedTabChan
 		panel.setHeight("550px");
 		panel.setWidth("1150px");
 		try {
-			//panel.setContent();
+			panel.setContent(new PlanningPromotion());
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return panel;
@@ -85,7 +83,6 @@ public class Student extends CustomComponent implements TabSheet.SelectedTabChan
 		try {
 			panel.setContent(new PlanningStudent());
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return panel;

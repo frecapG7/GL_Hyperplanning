@@ -82,9 +82,12 @@ public class BookRoom extends CustomComponent {
 		end.addStyleName("timefield");
 		end.addListener(new FocusListener() {
 			public void focus(FocusEvent event) {
-				verifyEndDate();
-				addRoom();
-				seeDisponibility();
+				Date beginDate = (Date) begin.getValue();
+				if (beginDate != null) {
+					verifyEndDate();
+					addRoom();
+					seeDisponibility();
+				}
 			}
 		});
 		vl.addComponent(end);
@@ -152,7 +155,7 @@ public class BookRoom extends CustomComponent {
 			con = new MysqlConnection();
 			ResultSet rs = con.queryTable("SELECT DISTINCT s.ID, s.Nom" +
 					" FROM salles s" +
-					" INNER JOIN cours c ON c.ID_salle = s.ID" +
+					" LEFT JOIN cours c ON c.ID_salle = s.ID" +
 					" WHERE s.id_batiment = " + idBatiment +
 					" AND s.ID NOT IN (" +
 					" SELECT ID_salle FROM cours" +
