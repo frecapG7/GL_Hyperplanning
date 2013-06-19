@@ -37,6 +37,7 @@ public class CreateCalendar {
 			String nom = rs.getString("Nom");
 			String hoursBegin = hf.format(rs.getTimestamp("Date_debut"));
 			String hoursEnd = hf.format(rs.getTimestamp("Date_Fin"));
+			String teacher = rs.getString("nomProf");
 			if (idMatiere == null) {
 				idMatiere = "";
 			}
@@ -46,7 +47,7 @@ public class CreateCalendar {
 			if (type == null) {
 				type = "";
 			}
-			eventProvider.addEvent(new BasicEvent(idMatiere + " " + nom, "Salle : " + salle + "<br />Type de cours : " + type + "<br>Remarque : " + remarque +
+			eventProvider.addEvent(new BasicEvent(idMatiere + " " + nom, "Professeur : " + teacher + "<br>Salle : " + salle + "<br />Type de cours : " + type + "<br>Remarque : " + remarque +
 					"<br>Heure début : " + hoursBegin + "<br>Heure fin : " + hoursEnd,		
 					date_debut, date_fin));
 		}

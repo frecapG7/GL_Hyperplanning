@@ -65,12 +65,14 @@ public class PlanningRoom extends CustomComponent {
 		con = new MysqlConnection();
 		ResultSet rs = con
 				.queryTable("SELECT m.ID as idMatiere,m.Nom AS Nom,c.Date_debut,c.Date_Fin,"
-						+ " tc.type, s.Nom AS salle, c.remarque"
+						+ " tc.type, s.Nom AS salle, c.remarque, p.nom AS nomProf"
 						+ " FROM cours c"
 						+ " INNER JOIN type_cours tc ON tc.id = c.type"
 						+ " INNER JOIN salles s ON s.ID = c.ID_salle"
+						+ " INNER JOIN personne p ON p.id_identifiant = c.ID_professeur"
 						+ " LEFT JOIN matiere m ON m.ID = c.ID_matiere"
 						+ " WHERE c.actif = 1"
+						+ " AND p.statut = 2"
 						+ " AND  s.ID = " + salleId);
 		return rs;
 

@@ -26,7 +26,6 @@ public class PlanningStudent extends CustomComponent {
 		//vl.setSizeFull();
 		vl.setSpacing(true);
 		vl.setMargin(true);
-		
 		cal = new Calendar();
 		try {
 			ResultSet rs = getScheduleStudent();
@@ -42,14 +41,17 @@ public class PlanningStudent extends CustomComponent {
 	private ResultSet getScheduleStudent() throws Exception {
 		con = new MysqlConnection();
 		ResultSet rs = con
-				.queryTable("SELECT matiere.ID as idMatiere,matiere.Nom AS Nom,cours.Date_debut,cours.Date_Fin, type_cours.type, salles.Nom AS salle, cours.remarque"
-						+ " FROM cours,matiere,groupe,groupe_eleve,eleve,type_cours,salles"
+				.queryTable("SELECT matiere.ID as idMatiere,matiere.Nom AS Nom,cours.Date_debut,cours.Date_Fin,"
+						+ " type_cours.type, salles.Nom AS salle, cours.remarque, p.nom AS nomProf"
+						+ " FROM cours,matiere,groupe,groupe_eleve,eleve,type_cours,salles, personne p"
 						+ " Where matiere.ID = cours.ID_matiere"
+						+ " AND p.id_identifiant = cours.ID_professeur"
 						+ " AND cours.ID_groupe_cours=groupe.ID AND "
 						+ " groupe.ID=groupe_eleve.ID_groupe AND "
 						+ " type_cours.id = cours.type AND salles.ID = cours.ID_salle"
 						+ " AND groupe_eleve.ID_eleve=eleve.id_eleve AND eleve.id_eleve =" + id
-						+ " AND actif = 1");
+						+ " AND actif = 1"
+						+ " AND p.statut = 2");
 		return rs;
 	}
 	

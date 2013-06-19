@@ -15,7 +15,6 @@ public class Administration extends CustomComponent implements TabSheet.Selected
 	public VerticalLayout vl = new VerticalLayout();
 	private MysqlConnection con;
 	public Panel planning;
-	public Panel room;
 	public Panel admin;
 	
 
@@ -33,31 +32,20 @@ public class Administration extends CustomComponent implements TabSheet.Selected
 	
 	public HorizontalLayout createToolbar() {
 		HorizontalLayout hl = new HorizontalLayout();
-		
 		hl.addComponent(quit);
-		
 		TabSheet tabsheet = new TabSheet();
-		
 		tabsheet.addListener(this);
-		
 		admin = admin();
-		room = room();
 		planning = planning();
-      
         // This will cause a selectedTabChange() call.
-		
 		tabsheet.addTab(planning, "Ajout planning", null);
-		tabsheet.addTab(room, "Reserver salle", null);
         tabsheet.addTab(admin, "Administration", null);
-        
-		
 		hl.addComponent(tabsheet);
 		return hl;
 	}
 	
 	public Panel admin() {
 		Panel panel = new Panel();
-		
 		panel.setHeight("550px");
 		panel.setWidth("1150px");
 		panel.setContent(new AdminTabsheet());
@@ -69,13 +57,6 @@ public class Administration extends CustomComponent implements TabSheet.Selected
 		panel.setHeight("550px");
 		panel.setWidth("1150px");
 		panel.setContent(new AddPlanning());
-		return panel;
-	}
-	
-	public Panel room() {
-		Panel panel = new Panel();
-		panel.setHeight("550px");
-		panel.setWidth("1150px");
 		return panel;
 	}
 

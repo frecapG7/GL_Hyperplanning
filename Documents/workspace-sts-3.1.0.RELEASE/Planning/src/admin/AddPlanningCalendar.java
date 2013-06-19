@@ -38,26 +38,28 @@ public class AddPlanningCalendar extends CustomComponent {
 	public VerticalLayout vl = new VerticalLayout();	
 	public Select classSubjectInputField=new Select("Matiere:");	
 	public TextField classTimeInputField=new TextField("Duree(minute):");
-	public TextField classWeekInputField=new TextField("Semaine:");
+	public TextField classWeekInputField=new TextField("Nombre de semaine:");
 	public Select classroomInputField=new Select("Salle:");
 	public Select classTypeInputField=new Select("Type:");
 	public Select classTeacherInputField=new Select("Professeur:");
-	public Button moveMe=new Button("Move me to calendar");
+	public Button moveMe=new Button("Déplacez le cours sur le créneau horaire souhaité");
 	public Button confirmAddPlanning=new Button("Valider");
 	public Button reset=new Button("Reset");
 	private MysqlConnection con= new MysqlConnection();;
 
 	public String nom;
 	public String type;
-	Window change = new Window("Changer");
+	Window change = new Window("Modification");
 	Calendar cal = new Calendar();
 	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
 	public AddPlanningCalendar(String nom, String type) throws Exception {
+		vl.setSpacing(true);
+		vl.setMargin(true);
 		this.nom = nom;
 		this.type = type;
 		setCompositionRoot(hl);
-		cal.setFirstVisibleDayOfWeek(2);
+		cal.setFirstVisibleDayOfWeek(1);
 		cal.setLastVisibleDayOfWeek(6);
 		cal.setFirstVisibleHourOfDay(8);
 		cal.setLastVisibleHourOfDay(20);
@@ -163,11 +165,7 @@ public class AddPlanningCalendar extends CustomComponent {
 			classTypeInputField.addItem(rs.getString("type"));
 
 		}
-		rs = con.queryTable("select Nom FROM personne where id_identifiant=2 ");
-		while (rs.next()) {
-			classTeacherInputField.addItem(rs.getString("Nom"));
-
-		}	
+		
 		classSubjectInputField.setNullSelectionItemId("Sélectionner");
 		classroomInputField.setNullSelectionItemId("Sélectionner");
 		classTypeInputField.setNullSelectionItemId("Sélectionner");
@@ -272,7 +270,7 @@ public class AddPlanningCalendar extends CustomComponent {
 		try {
 			con = new MysqlConnection();
 			ResultSet rs;
-				rs = con.queryTable("SELECT nom, prenom, id_identifiant"
+				rs = con.queryTable("SELECT DISTINCT nom, prenom, id_identifiant"
 						+ " FROM personne"
 						+ " WHERE statut = 2");
 			while (rs.next()) {
@@ -308,7 +306,7 @@ public class AddPlanningCalendar extends CustomComponent {
 		final DateField endDateField=new DateField();
 		beginDateField.setDateFormat("dd/MM/yyyy  HH:mm");
 		endDateField.setDateFormat("dd/MM/yyyy  HH:mm");
-		final Select classNameField=new Select("Nom de class");
+		final Select classNameField=new Select("Choix de la matière");
 		Date beginDate=e.getStart();
 		final String beginDateFinal=sdf.format(beginDate);
 		Date endDate=e.getEnd();

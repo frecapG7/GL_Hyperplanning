@@ -35,12 +35,16 @@ public class PlanningTeacher extends CustomComponent {
 	private ResultSet getScheduleTeacher() throws Exception {
 		con = new MysqlConnection();
 		ResultSet rs = con
-				.queryTable("SELECT m.ID as idMatiere,m.Nom AS Nom, c.Date_debut, c.Date_Fin, tc.type, s.Nom AS salle, c.remarque FROM cours c"
+				.queryTable("SELECT m.ID as idMatiere,m.Nom AS Nom, c.Date_debut, c.Date_Fin, tc.type,"
+						+ " s.Nom AS salle, c.remarque, p.nom AS nomProf"
+						+ " FROM cours c"
+						+ " INNER JOIN personne p ON p.id_identifiant = c.ID_professeur"
 						+ " LEFT JOIN matiere m ON m.ID = c.ID_matiere"
 						+ " LEFT JOIN type_cours tc ON tc.id = c.type"
 						+ " LEFT JOIN salles s ON s.ID = c.ID_salle"
-						+ " WHERE ID_professeur = " + id
-						+ " AND actif = 1");
+						+ " WHERE c.ID_professeur = " + id
+						+ " AND c.actif = 1"
+						+ " AND p.statut = 2");
 		return rs;
 	}
 
