@@ -1,6 +1,7 @@
 package student;
 
 import global.MysqlConnection;
+import com.vaadin.ui.AbsoluteLayout;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.HorizontalLayout;
@@ -20,42 +21,34 @@ public class Student extends CustomComponent implements TabSheet.SelectedTabChan
 
 	public Student() {
 		setCompositionRoot(vl);
-		vl.setSizeFull();
-		vl.setSpacing(true);
 		vl.setMargin(true);
+		vl.setSpacing(true);
+		vl.setSizeFull();
 		Panel panel = new Panel("Planning");
-		vl.addComponent(quit);
 		vl.addComponent(panel);
 		panel.addComponent(createToolbar());		
 	}
 	
 	public HorizontalLayout createToolbar() {
 		HorizontalLayout hl = new HorizontalLayout();
-		
-		hl.addComponent(quit);
-		
 		TabSheet tabsheet = new TabSheet();
-		
 		tabsheet.addListener(this);
-		
 		myCalendar = myCalendar();
 		calendarPromotion = calendarPromotion();
 		calendarRoom = calendarRoom();
-      
-        // This will cause a selectedTabChange() call.
-		
 		tabsheet.addTab(myCalendar, "Mon planning", null);
 		tabsheet.addTab(calendarPromotion, "Planning promotion", null);
-        tabsheet.addTab(calendarRoom, "Planning salle", null);
-        
-		hl.addComponent(tabsheet);
+        tabsheet.addTab(calendarRoom, "Planning salle", null); 
+        hl.addComponent(tabsheet);
+        quit.addStyleName("quitButton");
+        hl.addComponent(quit);
 		return hl;
 	}
 	
 	private Panel calendarRoom() {
 		Panel panel = new Panel();
 		panel.setHeight("550px");
-		panel.setWidth("1150px");
+		panel.setWidth("1200px");
 		try {
 			panel.setContent(new PlanningRoom());
 		} catch (Exception e) {
@@ -67,7 +60,7 @@ public class Student extends CustomComponent implements TabSheet.SelectedTabChan
 	private Panel calendarPromotion() {
 		Panel panel = new Panel();
 		panel.setHeight("550px");
-		panel.setWidth("1150px");
+		panel.setWidth("1200px");
 		try {
 			panel.setContent(new PlanningPromotion());
 		} catch (Exception e) {
@@ -79,7 +72,7 @@ public class Student extends CustomComponent implements TabSheet.SelectedTabChan
 	private Panel myCalendar() {
 		Panel panel = new Panel();
 		panel.setHeight("550px");
-		panel.setWidth("1150px");
+		panel.setWidth("1200px");
 		try {
 			panel.setContent(new PlanningStudent());
 		} catch (Exception e) {

@@ -32,13 +32,11 @@ public class BookRoom extends CustomComponent {
 	private TextArea note;
 	private int id = LoginInformation.identifiant;
 
-	
 	public BookRoom() {
 		setCompositionRoot(vl);
 		vl.setSpacing(true);
 		vl.setMargin(true);
 		vl.addComponent(quit);
-
 		matiere = new Select("Choix de la matière");
 		try {
 			getMatiere();

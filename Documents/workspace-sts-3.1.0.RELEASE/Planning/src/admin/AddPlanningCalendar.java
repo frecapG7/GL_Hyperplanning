@@ -65,7 +65,7 @@ public class AddPlanningCalendar extends CustomComponent {
 		cal.setLastVisibleHourOfDay(20);
 		// cal.setTimeZone(TimeZone.getTimeZone("Europe/Paris"));
 		cal.setHeight("450px");
-		cal.setWidth("850px");
+		cal.setWidth("900px");
 		BasicEventProvider eventProvider = (BasicEventProvider) cal
 				.getEventProvider();
 				

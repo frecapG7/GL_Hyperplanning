@@ -17,7 +17,7 @@ public class CreateCalendar {
 		cal.setLastVisibleDayOfWeek(6);
 		cal.setFirstVisibleHourOfDay(8);
 		cal.setLastVisibleHourOfDay(20);
-		cal.setWidth("1100px");
+		cal.setWidth("1150px");
 		cal.setHeight("500px");
 
 		BasicEventProvider eventProvider = (BasicEventProvider) cal

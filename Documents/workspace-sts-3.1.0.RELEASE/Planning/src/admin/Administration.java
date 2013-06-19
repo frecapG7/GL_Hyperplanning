@@ -32,7 +32,6 @@ public class Administration extends CustomComponent implements TabSheet.Selected
 	
 	public HorizontalLayout createToolbar() {
 		HorizontalLayout hl = new HorizontalLayout();
-		hl.addComponent(quit);
 		TabSheet tabsheet = new TabSheet();
 		tabsheet.addListener(this);
 		admin = admin();
@@ -41,13 +40,15 @@ public class Administration extends CustomComponent implements TabSheet.Selected
 		tabsheet.addTab(planning, "Ajout planning", null);
         tabsheet.addTab(admin, "Administration", null);
 		hl.addComponent(tabsheet);
+		quit.addStyleName("quitButton");
+		hl.addComponent(quit);
 		return hl;
 	}
 	
 	public Panel admin() {
 		Panel panel = new Panel();
 		panel.setHeight("550px");
-		panel.setWidth("1150px");
+		panel.setWidth("1200px");
 		panel.setContent(new AdminTabsheet());
 		return panel;
 	}
@@ -55,7 +56,7 @@ public class Administration extends CustomComponent implements TabSheet.Selected
 	public Panel planning() {
 		Panel panel = new Panel();
 		panel.setHeight("550px");
-		panel.setWidth("1150px");
+		panel.setWidth("1200px");
 		panel.setContent(new AddPlanning());
 		return panel;
 	}

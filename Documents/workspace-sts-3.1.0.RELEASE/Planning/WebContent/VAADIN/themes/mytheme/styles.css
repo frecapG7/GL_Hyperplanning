@@ -21,3 +21,9 @@
 .v-datefield-popup-timefield .v-label {
 	width: 20px;
 }
+
+.quitButton {
+	position: absolute;
+	top: 21px;
+	left: 1140px;
+}

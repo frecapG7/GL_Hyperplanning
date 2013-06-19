@@ -39,32 +39,25 @@ public class Teacher extends CustomComponent implements TabSheet.SelectedTabChan
 	
 	public HorizontalLayout createToolbar() {
 		HorizontalLayout hl = new HorizontalLayout();
-		
-		hl.addComponent(quit);
-		
 		TabSheet tabsheet = new TabSheet();
-		
 		tabsheet.addListener(this);
-		
 		admin = admin();
 		room = room();
 		planning = planning();
-      
         // This will cause a selectedTabChange() call.
-		
 		tabsheet.addTab(planning, "Consulter planning", null);
 		tabsheet.addTab(room, "Reserver salle", null);
         tabsheet.addTab(admin, "Administration", null);
-        
-		
 		hl.addComponent(tabsheet);
+		quit.addStyleName("quitButton");
+		hl.addComponent(quit);
 		return hl;
 	}
 	
 	public Panel admin() {
 		Panel panel = new Panel();
 		panel.setHeight("550px");
-		panel.setWidth("1150px");
+		panel.setWidth("1200px");
 		try {
 			panel.setContent(new ChangeProfesseur());
 		} catch (Exception e) {
@@ -77,7 +70,7 @@ public class Teacher extends CustomComponent implements TabSheet.SelectedTabChan
 	public Panel planning() {
 		Panel panel = new Panel();
 		panel.setHeight("550px");
-		panel.setWidth("1150px");
+		panel.setWidth("1200px");
 		try {
 			panel.setContent(new PlanningTeacher());
 		} catch (Exception e) {
@@ -90,7 +83,7 @@ public class Teacher extends CustomComponent implements TabSheet.SelectedTabChan
 	public Panel room() {
 		Panel panel = new Panel();
 		panel.setHeight("550px");
-		panel.setWidth("1150px");
+		panel.setWidth("1200px");
 		try {
 			panel.setContent(new BookRoom());
 		} catch (Exception e) {
